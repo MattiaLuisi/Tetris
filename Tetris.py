@@ -81,6 +81,7 @@ def move_down(griglia_di_gioco):
     return copia_griglia
 
 #main()
+print("Ciao")
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
