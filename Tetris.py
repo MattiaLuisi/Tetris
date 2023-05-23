@@ -25,7 +25,7 @@ def next_block():
         blocco=[[0,-1],[-1,-1],[-1,0],[0,0]]
         return blocco
     elif a==blocchi[5]:
-        blocco=[[0,-1],[0,-1],[-1,-1][0,0]]
+        blocco=[[0,-1],[0,-1],[-1,-1],[0,0]]
         return blocco
     elif a==blocchi[6]:
         blocco=[[-1,-1],[-1,-1],[0,0],[0,0]]
@@ -73,16 +73,58 @@ def game_over(griglia_di_gioco):
     return False
 
 def move_down(griglia_di_gioco):
-    copia_griglia=copy.copy(griglia_di_gioco)
+    copia_griglia=[]
+    rigatmp=[]
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella!=-1:
+                rigatmp.append(griglia_di_gioco[r][c])
+            else:
+                rigatmp.append(0)
+        copia_griglia.append(rigatmp)
+        rigatmp=[]
     for r,riga in enumerate(griglia_di_gioco):
         for c,cella in enumerate(riga):
             if cella==-1:
                 copia_griglia[r+1][c] = -1
     return copia_griglia
 
+def move_left(griglia_di_gioco):
+    copia_griglia=[]
+    rigatmp=[]
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella!=-1:
+                rigatmp.append(griglia_di_gioco[r][c])
+            else:
+                rigatmp.append(0)
+        copia_griglia.append(rigatmp)
+        rigatmp=[]
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella==-1:
+                copia_griglia[r][c-1] = -1
+    return copia_griglia
+
+def move_right(griglia_di_gioco):
+    copia_griglia=[]
+    rigatmp=[]
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella!=-1:
+                rigatmp.append(griglia_di_gioco[r][c])
+            else:
+                rigatmp.append(0)
+        copia_griglia.append(rigatmp)
+        rigatmp=[]
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella==-1:
+                copia_griglia[r][c+1] = -1
+    return copia_griglia
+
+
 #main()
-print("Ciao")
-print("Come va?")
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
@@ -104,8 +146,8 @@ griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
                   [2,2,2,2,2,2,2,2,2,2]]
 blocchi=["L","T","S","I","Z","J","Q"]
+griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
 while not game_over(griglia_di_gioco):
-    griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
     os.system("cls")
     stampa_griglia(griglia_di_gioco)
     azione=input("Scegli direzione o rotazione (W,S,D,A): ").upper()
@@ -114,6 +156,6 @@ while not game_over(griglia_di_gioco):
     elif azione=="S":
         griglia_di_gioco=move_down(griglia_di_gioco)
     elif azione=="D":
-        print()
+         griglia_di_gioco=move_right(griglia_di_gioco)
     elif azione=="A":
-        print()
+         griglia_di_gioco=move_left(griglia_di_gioco)
