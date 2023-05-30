@@ -1,9 +1,9 @@
 import random
 import os
-import copy
+import msvcrt
 
 def random_block():
-    a=random.randint(0,len(blocchi))
+    a=random.randint(0,len(blocchi)-1)
     print(a)
     return blocchi[a]
 
@@ -48,12 +48,14 @@ def insert_block(blocco,griglia_di_gioco):
             for i in range(len(line)):
                 cdx=round(len(line)/2)
                 csx=cdx-1
+                if griglia_di_gioco[j][csx]!=0 or griglia_di_gioco[j][cdx]!=0:
+                    raise Exception("HAI PERSO :)")
                 griglia_di_gioco[j][csx]=blocco[j][0]
                 griglia_di_gioco[j][cdx]=blocco[j][1]
     return griglia_di_gioco
 
 
-def game_over(griglia_di_gioco):
+#def game_over(griglia_di_gioco):
     count=[]
     nrighe=0
     ncolonne=0
@@ -124,7 +126,7 @@ def move_right(griglia_di_gioco):
     return copia_griglia
 
 # funzione che ritorna true se il blocco si puo spostare lungo la direzione, false altrimenti.
-def there_is_something(griglia_di_gioco, direzione):
+def there_is_nothing(griglia_di_gioco, direzione):
     if direzione == 'W':
         shift = 0
     elif direzione == 'D':
@@ -143,6 +145,13 @@ def there_is_something(griglia_di_gioco, direzione):
                     if griglia_di_gioco[r+shift][c] != 0 and griglia_di_gioco[r+shift][c] != -1:
                         return False
     return True
+
+def freeze_block(griglia_di_gioco):
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella==-1:
+                griglia_di_gioco[r][c]=1
+    return griglia_di_gioco
 
 #main()
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
@@ -167,15 +176,22 @@ griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,2,2,2,2,2,2,2,2,2]]
 blocchi=["L","T","S","I","Z","J","Q"]
 griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
-while not game_over(griglia_di_gioco):
+while True(griglia_di_gioco):
     os.system("cls")
     stampa_griglia(griglia_di_gioco)
-    azione=input("Scegli direzione o rotazione (W,S,D,A): ").upper()
+    azione=msvcrt.getwch().upper()
+    #azione=input("Scegli direzione o rotazione (W,S,D,A): ").upper()
     if azione=="W":
         print()
-    elif azione=="S":
-        griglia_di_gioco=move_down(griglia_di_gioco)
+    elif azione=='S':
+        if there_is_nothing(griglia_di_gioco,azione):
+            griglia_di_gioco=move_down(griglia_di_gioco)
+        else:
+            griglia_di_gioco=freeze_block(griglia_di_gioco)
+            griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
     elif azione=="D":
-         griglia_di_gioco=move_right(griglia_di_gioco)
+        if there_is_nothing(griglia_di_gioco,azione):
+            griglia_di_gioco=move_right(griglia_di_gioco)
     elif azione=="A":
-         griglia_di_gioco=move_left(griglia_di_gioco)
+        if there_is_nothing(griglia_di_gioco,azione):
+            griglia_di_gioco=move_left(griglia_di_gioco)
