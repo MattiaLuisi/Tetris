@@ -123,6 +123,26 @@ def move_right(griglia_di_gioco):
                 copia_griglia[r][c+1] = -1
     return copia_griglia
 
+# funzione che ritorna true se il blocco si puo spostare lungo la direzione, false altrimenti.
+def there_is_something(griglia_di_gioco, direzione):
+    if direzione == 'W':
+        shift = 0
+    elif direzione == 'D':
+        shift = 1
+    elif direzione == 'S':
+        shift = 1
+    elif direzione == 'A':
+        shift = -1
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella == -1:
+                if direzione == 'D' or direzione=='A' :
+                    if griglia_di_gioco[r][c+shift] != 0 and griglia_di_gioco[r][c+shift] != -1:
+                        return False
+                else :
+                    if griglia_di_gioco[r+shift][c] != 0 and griglia_di_gioco[r+shift][c] != -1:
+                        return False
+    return True
 
 #main()
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
