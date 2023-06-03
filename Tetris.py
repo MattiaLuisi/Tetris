@@ -4,7 +4,6 @@ import msvcrt
 
 def random_block():
     a=random.randint(0,len(blocchi)-1)
-    print(a)
     return blocchi[a]
 
 def next_block():
@@ -45,13 +44,13 @@ def stampa_griglia(griglia):
 def insert_block(blocco,griglia_di_gioco):
     for j,line in enumerate(griglia_di_gioco):
         if j<len(blocco):  
-            for i in range(len(line)):
-                cdx=round(len(line)/2)
-                csx=cdx-1
-                if griglia_di_gioco[j][csx]!=0 or griglia_di_gioco[j][cdx]!=0:
-                    raise Exception("HAI PERSO :)")
-                griglia_di_gioco[j][csx]=blocco[j][0]
-                griglia_di_gioco[j][cdx]=blocco[j][1]
+            #for i in range(len(line)):
+            cdx=round(len(line)/2)
+            csx=cdx-1
+            if griglia_di_gioco[j][csx]!=0 or griglia_di_gioco[j][cdx]!=0:
+                return False
+            griglia_di_gioco[j][csx]=blocco[j][0]
+            griglia_di_gioco[j][cdx]=blocco[j][1]
     return griglia_di_gioco
 
 
@@ -153,6 +152,30 @@ def freeze_block(griglia_di_gioco):
                 griglia_di_gioco[r][c]=1
     return griglia_di_gioco
 
+def check_line(griglia_di_gioco):
+    i=linea_piena(griglia_di_gioco)
+    while i!=0:
+        for c,cella in enumerate(griglia_di_gioco[i]):
+            if cella==1:
+                griglia_di_gioco[i][c]=0
+        griglia_di_gioco[:i]=shift_array(griglia_di_gioco[:i]) 
+        i=linea_piena(griglia_di_gioco)
+    return griglia_di_gioco
+
+def linea_piena(griglia_di_gioco):
+    cont=0
+    for r,riga in enumerate(griglia_di_gioco):
+        for c,cella in enumerate(riga):
+            if cella==1:
+                cont=cont+1
+        if cont>=(len(riga)-2):
+            return r
+        cont=0
+    return 0
+
+def shift_array(arr): 
+    shifted_arr = arr[:1] + [arr[0]] 
+    return shifted_arr
 #main()
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
@@ -176,7 +199,7 @@ griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,2,2,2,2,2,2,2,2,2]]
 blocchi=["L","T","S","I","Z","J","Q"]
 griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
-while True(griglia_di_gioco):
+while griglia_di_gioco:
     os.system("cls")
     stampa_griglia(griglia_di_gioco)
     azione=msvcrt.getwch().upper()
@@ -188,6 +211,7 @@ while True(griglia_di_gioco):
             griglia_di_gioco=move_down(griglia_di_gioco)
         else:
             griglia_di_gioco=freeze_block(griglia_di_gioco)
+            griglia_di_gioco=check_line(griglia_di_gioco)
             griglia_di_gioco=insert_block(next_block(),griglia_di_gioco)
     elif azione=="D":
         if there_is_nothing(griglia_di_gioco,azione):
@@ -195,3 +219,4 @@ while True(griglia_di_gioco):
     elif azione=="A":
         if there_is_nothing(griglia_di_gioco,azione):
             griglia_di_gioco=move_left(griglia_di_gioco)
+print("HAI PERSO! :)")
