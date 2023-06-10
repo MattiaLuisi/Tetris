@@ -158,7 +158,7 @@ def check_line(griglia_di_gioco):
         for c,cella in enumerate(griglia_di_gioco[i]):
             if cella==1:
                 griglia_di_gioco[i][c]=0
-        griglia_di_gioco[:i]=shift_array(griglia_di_gioco[:i]) 
+        griglia_di_gioco[:i+1]=shift_array(griglia_di_gioco[:i+1]) 
         i=linea_piena(griglia_di_gioco)
     return griglia_di_gioco
 
@@ -173,9 +173,13 @@ def linea_piena(griglia_di_gioco):
         cont=0
     return 0
 
-def shift_array(arr): 
-    shifted_arr = arr[:1] + [arr[0]] 
+def shift_array(arr):
+    shifted_arr = [arr[-1]]+ arr[:-1]
     return shifted_arr
+
+def rotate(griglia_di_gioco):
+    pass
+
 #main()
 griglia_di_gioco=[[2,0,0,0,0,0,0,0,0,2],
                   [2,0,0,0,0,0,0,0,0,2],
@@ -205,7 +209,8 @@ while griglia_di_gioco:
     azione=msvcrt.getwch().upper()
     #azione=input("Scegli direzione o rotazione (W,S,D,A): ").upper()
     if azione=="W":
-        print()
+        if there_is_nothing(griglia_di_gioco,azione):
+            griglia_di_gioco=rotate(griglia_di_gioco)
     elif azione=='S':
         if there_is_nothing(griglia_di_gioco,azione):
             griglia_di_gioco=move_down(griglia_di_gioco)
